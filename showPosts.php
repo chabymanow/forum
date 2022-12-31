@@ -1,14 +1,13 @@
 <?php
-    include_once "database.php";
+session_start();
     include "header.php";
-
+    include_once "database.php";
     $postNumber = $_GET["postID"];
     $posts = mysqli_query($conn, "SELECT * FROM forumposts INNER JOIN users USING (userID) WHERE mainID='$postNumber'");
     $threadID = $_GET["postID"];
-    $getThreadTitle = mysqli_query($conn, "SELECT mainTitle FROM mainThreads WHERE mainID = '$threadID'");
+    $getThreadTitle = mysqli_query($conn, "SELECT mainTitle FROM mainthreads WHERE mainID = '$threadID'");
     $ThreadTitle = mysqli_fetch_array($getThreadTitle);
-    ?>
-  <div class="w-[80%] max-w-[1024px] h-screen flex flex-col bg-slate-200 mx-auto py-8">      
+    ?>  
         <div class="w-[90%] h-fit flex flex-col px-4 py-2 mb-5 gap-2 rounded-lg mx-auto"> 
    
             <div class="w-full flex flex-row justify-between text-2xl px-4 py-2 rounded-lg bg-slate-300 text-stone-800">
@@ -33,7 +32,7 @@
                 md:flex-row md:justify-between md:text-left
                 lg:flex-row lg:justify-between lg:text-left">
                         <div class="min-w-[60%]">
-                            <a class="text-3xl font-semibold pb-4" href="showpost.php?postID=<?php echo $row["postID"]; ?>"><?php echo $row["postTitle"]; ?></a>
+                            <a class="text-3xl font-semibold pb-4" href="showPost.php?postID=<?php echo $row["postID"]; ?>"><?php echo $row["postTitle"]; ?></a>
                             <div><?php echo "Creator: " . $row["userName"]; ?></div>
                         </div>
                         <div class="flex flex-row min-w-[40%] justify-between">
@@ -60,7 +59,6 @@
                 </div>
             <?php } ?>
         </div>
-    </div>
 <?php
 include "footer.php";
 ?>

@@ -1,7 +1,7 @@
 <?php
-    include_once "database.php";
+session_start();
     include "header.php";
-
+    include_once "database.php";
     if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
     $threadTitle = $threadDesc = "";
@@ -24,7 +24,7 @@
             If(!empty($threadTitle) && !empty($threadDesc)){
                 $userMessage = "Ok I am writing the data now...";
                 $userID = $_SESSION["id"];
-                $threadData = mysqli_query($conn, "INSERT INTO mainThreads (userID, mainTitle, mainDesc, mainCreationDate) VALUES
+                $threadData = mysqli_query($conn, "INSERT INTO mainthreads (userID, mainTitle, mainDesc, mainCreationDate) VALUES
                 ('$userID', '$threadTitle', '$threadDesc', STR_TO_DATE(now(), '%Y-%m-%d %H:%i:%s'))");
                 $threadTitle = $threadDesc = "";
                 $userMessage = "The new thread is in the systemnow!";
@@ -32,8 +32,8 @@
         }
     }
 ?>
-<div class="w-[80%] max-w-[1024px] h-screen flex flex-col bg-sky-500 mx-auto">     
-        <div class="flex flex-col w-[70%] mx-auto mt-10 px-4 py-2 rounded-lg bg-slate-200 text-lg text-stone-800">
+     
+        <div class="flex flex-col w-[70%] mx-auto mt-10 px-4 py-2">
         <div class="text-center text-3xl font-semibold mb-8">Create new thread</div>
         <div class="w-[70%] mx-auto">
             <form class="flex flex-col" action="createThread.php" method="POST">
@@ -51,6 +51,6 @@
             </form>
         </div>
     </div>
-</div>
+
 <?php }?>
 <?php include "footer.php"; ?>

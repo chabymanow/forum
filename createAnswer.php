@@ -1,7 +1,6 @@
 <?php
-    include_once "database.php";
     include "header.php";
-
+    include_once "database.php";
     if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     $allowedTags='<p><strong><em><u><h1><h2><h3><h4><h5><h6><img>';
     $allowedTags.='<li><ol><ul><span><div><br><ins><del>';

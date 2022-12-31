@@ -1,29 +1,38 @@
 <?php
-    include_once "database.php";
+    session_start();
     include "header.php";
+    include_once "database.php";
 
-    $forum = mysqli_query($conn, "SELECT * FROM mainThreads
-        INNER JOIN users USING (userID)");
+    try{
+        if($forum = mysqli_query($conn, "SELECT * FROM mainthreads INNER JOIN users USING (userID)")){
+            $myName = mysqli_fetch_array($forum);
+        }else{
+            $error_msg = mysqli_error($conn);
+            echo $error_msg;
+            throw new Exception($error_msg);
+        }
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }
 
     ?>
-    <div class="w-[80%] max-w-[1024px] h-fit py-10 flex flex-col bg-slate-200 mx-auto">
-        <div class="flex flex-col w-[90%] h-fit min-h-screen mx-auto gap-2">
-        <div class="w-full flex flex-row justify-between text-2xl px-4 py-2 rounded-lg bg-slate-200 text-stone-800">
-        <div class="w-full flex justify-between text-3xl font-semibold px-4 py-2 rounded-lg bg-slate-300 text-stone-800">
-                <?php echo "Main threads" ?>
-            
-                 <?php
-                if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-                    ?>                       
-                        <a href="createThread.php">
-                        <div class="w-fit px-4 py-1 rounded-lg text-xl font-medium text-stone-800 bg-gradient-to-tr from-orange-400 to-orange-700 cursor-pointer shadow-md
-                    hover:shadow-sm">
-                    Create new thread
-                        </div>
-                        </a>                      
-                    <?php } ?>
+        <div class="flex flex-col w-[90%] mx-auto gap-2">
+            <div class="w-full flex flex-row justify-between text-2xl px-4 py-2">
+                <div class="w-full flex justify-between text-3xl font-semibold px-4 py-2 rounded-lg bg-slate-300 text-stone-800">
+                    <?php echo "Main threads" ?>
+                
+                    <?php
+                    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+                        ?>                       
+                            <a href="createThread.php">
+                            <div class="w-fit px-4 py-1 rounded-lg text-xl font-medium text-stone-800 bg-gradient-to-tr from-orange-400 to-orange-700 cursor-pointer shadow-md
+                                hover:shadow-sm">
+                                Create new thread
+                            </div>
+                            </a>                      
+                        <?php } ?>
                 </div>
-        </div>
+            </div>
             <?php
                 while($row = mysqli_fetch_array($forum)){ ?>
                 <div class="flex flex-row justify-between px-4 py-2 border-b-2 border-slate-300">
@@ -43,7 +52,7 @@
                         <div>Posts: </div>
                         <?php
                             $id = $row["mainID"];
-                            $answerCount = mysqli_query($conn, "SELECT COUNT(postID) AS NumberOfPost FROM forumPosts WHERE mainID = '$id'");
+                            $answerCount = mysqli_query($conn, "SELECT COUNT(postID) AS NumberOfPost FROM forumposts WHERE mainID = '$id'");
                             $answerC = mysqli_fetch_array($answerCount);
                         ?>
                         <div class="text-3xl text-center"><?php echo $answerC["NumberOfPost"] ?></div>
@@ -61,5 +70,5 @@
                 </div>
             <?php } ?>         
         </div>
-    </div>
+  
     <?php include "footer.php"; ?>

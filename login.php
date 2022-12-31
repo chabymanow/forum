@@ -1,13 +1,14 @@
 <?php
-
+ob_start();
+session_start();
+include_once "database.php";
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    
     header("location: index.php");
     exit;
 }
- 
-// Include config file
-require_once "database.php";
+
  
 // Define variables and initialize with empty values
 $useremail = $password = "";
@@ -15,7 +16,7 @@ $username_err = $password_err = $login_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
+    ob_start();
     // Check if username is empty
     if(empty(trim($_POST["useremail"]))){
         $username_err = "Please enter useremail.";
@@ -34,14 +35,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
         $sql = "SELECT userID, userName, password, userEmail FROM users WHERE userEmail = ?";
-        
         if($stmt = mysqli_prepare($conn, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_useremail);
+
             
             // Set parameters
             $param_useremail = $useremail;
-            
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Store result
@@ -55,13 +55,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
-                            
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["useremail"] = $useremail; 
-                            $_SESSION["username"] = $username;                    
-                            
+                            $_SESSION["username"] = $username;                 
                             // Redirect user to welcome page
                             header("location: index.php");
                         } else{
@@ -87,9 +85,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <div class="flex flex-col h-screen">
   <?php include "header.php"; ?>
-  <div class="flex justify-center min-h-[80%] h-[80%] flex-grow items-center">
-    <div class="w-[20%] h-fit items-center bg-slate-200 rounded-2xl py-10 px-5 border-1 shadow-md">
-      <form class="flex flex-col gap-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+  <div class="flex justify-center flex-grow items-center">
+    <div class="w-[20%] h-fit items-center bg-sky-500 rounded-2xl py-10 px-5 border-1 shadow-md">
+      <form class="flex flex-col gap-3" action="login.php" method="post">
         <h1 class="text-center text-4xl font-bold mb-8">Login</h1>
         <label for="useremail">Email</label>
         <span class="text-red-600 text-sm font-bold"> <?php echo $username_err;?></span>

@@ -1,7 +1,8 @@
 <?php
-    include_once "database.php";
+    session_start();
     include "header.php";
-
+    include_once "database.php";
+    
     $allowedTags='<p><strong><em><u><h1><h2><h3><h4><h5><h6><img>';
     $allowedTags.='<li><ol><ul><span><div><br><ins><del>';
 
@@ -11,7 +12,7 @@
 
     if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
-        $getPostTitle = mysqli_query($conn, "SELECT postTitle FROM forumposts");
+        $getPostTitle = mysqli_query($conn, "SELECT posttitle FROM forumposts");
         $postTitle = mysqli_fetch_array($getPostTitle);
         $sHeader = '<h1>Nothing submitted yet</h1>';
         $sContent = '';
@@ -53,8 +54,7 @@
     $post = mysqli_query($conn, "SELECT * FROM forumposts INNER JOIN users USING (userID) WHERE postID='$postNumber'");
     $answers = mysqli_query($conn, "SELECT * FROM answers INNER JOIN users USING (userID) WHERE postID='$postNumber'")
     ?>
-    <div class="w-screen h-screen justify-center">
-        <div class="w-[80%] max-w-[1024px] min-h-screen flex flex-col bg-slate-200 mx-auto py-12">
+
             <div class="flex flex-col w-[90%] h-fit mx-auto gap-5 px-4 py-2">
                 <?php
                     while($row = mysqli_fetch_array($post)){ ?>
@@ -108,7 +108,20 @@
                 <div class="w-full text-2xl text-center mt-10">You need to <a class="text-3xl text-sky-600" href="login.php">login</a> to write an answer</div>
             <?php } ?>
         </div>
-    </div>
-</div>
 
+<script language="javascript" type="text/javascript">
+    tinyMCE.init({
+        theme: "silver",
+        mode: "exact",
+        selector: '#editor',
+        elements: "post_text",
+        theme_silver_toolbar_location: "top",
+        theme_silver_buttons1: "bold,italic,underline,strikethrough,separator,"
+        + "justifyleft,justifycenter,justifyright,justifyfull,formatselect,"
+        + "bullist,numlist,outdent,indent",
+        theme_silver_buttons2: "link,unlink,anchor,image,separator,"
+        +"undo,redo,cleanup,code,separator,sub,sup,charmap",
+        theme_silver_buttons3: "",
+    });
+</script>
 <?php include "footer.php"; ?>
