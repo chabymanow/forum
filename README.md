@@ -9,3 +9,4 @@ Variables:
 * ```$username```
 * ```$password```
 
+The forum is not responsive yet. This will be the next step.
