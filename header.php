@@ -12,10 +12,12 @@
     <script language="javascript" type="text/javascript" src="./tinymce/js/tinymce/tinymce.min.js"></script>
 </head>
 <body>
-    <?php session_start(); ?> 
+     
     <?php 
         include_once "database.php";
         include "nav.php";
     ?>
     <div class="w-screen h-screen justify-center">
-        <div class="w-[80%] max-w-[1024px] min-h-screen flex flex-col bg-slate-200 mx-auto py-12 mt-5 rounded-lg mb-10">
+        <div class="w-[80%] max-w-[1024px] h-fit min-h-[70%] flex flex-col bg-slate-200 mx-auto py-12 mt-5 rounded-lg mb-10
+        md:h-fit md:min-h-[70%]
+        lg:h-fit lg:min-h-[70%]">

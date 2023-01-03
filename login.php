@@ -83,10 +83,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 ?>
 
-<div class="flex flex-col h-screen">
   <?php include "header.php"; ?>
   <div class="flex justify-center flex-grow items-center">
-    <div class="w-[20%] h-fit items-center bg-sky-500 rounded-2xl py-10 px-5 border-1 shadow-md">
+    <div class="w-96 max-w-[90%] h-fit items-center bg-sky-500 rounded-2xl py-10 px-5 border-1 shadow-md">
       <form class="flex flex-col gap-3" action="login.php" method="post">
         <h1 class="text-center text-4xl font-bold mb-8">Login</h1>
         <label for="useremail">Email</label>
@@ -103,4 +102,3 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
   </div>
   <?php @ require_once ("footer.php"); ?>
-</div>
